@@ -106,16 +106,26 @@ Here’s how the components interact during common operations.
 
 ---
 
-## ⛓️ Component Interaction Flow 
-### Concept : Classes & Object (OOP)
+## ⛓️ Component Interaction Flow
+### Concept: Classes & Objects (OOP)
 
-This is a more detailed, class-by-class flow of how components call each other:
+- Class = blueprint/type. Example files: `Employee.java`, `Model.java`, `Outlet.java`.
+- Object = an instance of a class created at runtime with `new`. Example:
+```java
+Employee emp = new Employee("E001", "Alice", "Manager", "secret");
+```
 
-* **`Main` → `ConsoleUI`**: The program starts in `Main.java`, which delegates all interactive flows to the `ConsoleUI`.
-* **`ConsoleUI` → `AuthService`**: Login prompts are handled by `ConsoleUI`, which calls `AuthService` to verify credentials.
-* **`ConsoleUI` → `Service Classes`**: All main actions (e.g., "Stock Management", "Sales Service") call the corresponding service class (e.g., `StockCountService`, `StockMovementService`).
-* **`AuthService` / `Services` → `CSVHandler`**: The service classes load data by calling the `CSVHandler` (e.g., `readEmployees`, `readStock`, `writeStock`).
-* **`CSVHandler` → Models (`Employee`, `Stock`... )**: The `CSVHandler` uses static factory methods (like `Employee.fromCSV()`) to parse individual CSV rows into data objects.
+Types of classes used here
+- Data classes (POJOs): hold state and simple behavior
+  - com.goldenhour.categories.Employee — id, name, role, password; `fromCSV` / `toCSV`.
+  - com.goldenhour.categories.Model — model code, price, and a map of stock per outlet.
+  - com.goldenhour.categories.Outlet — code and name.
+- Service / utility classes: contain business logic or I/O, often expose static methods
+  - com.goldenhour.service.AuthService — login/logout and `currentUser` session (static).
+  - com.goldenhour.storage.CSVHandler — read/write CSV files and convert rows ⇄ objects.
+  - Other services: `RegistrationService`, `StockMovementService`, `StockCountService`, `SalesService`.
+
+--- 
 
 ## 📊 Data Flow
 ### Concept : IO handling
@@ -126,7 +136,7 @@ All data operations in this application follow a consistent, two-way pattern. A 
 
 ### Reading from CSV (Text to Object)
 
-This flow is used for actions like logging in or loading all stock at startup.
+Take logging in or loading all stock at startup for example :
 
 1.  **Action Triggered:** A user attempts to log in.
 2.  **`Service` Class:** The request is sent to the assigned service (e.g., `AuthService`).
@@ -141,17 +151,40 @@ This flow is used for actions like logging in or loading all stock at startup.
 
 ### Writing to CSV (Object to Text)
 
-This flow is used for actions like saving a sale, registering a new user, or updating stock quantities.
+Take registering a new user, or updating stock quantities for example :
 
 1.  **Action Triggered:** A user moves stock from one outlet to another.
 2.  **`Service` Class:** The request is handled by the assigned service (e.g., `StockMovementService`), which now has the updated data as a Java `Object` (e.g., a `Stock` object).
 3.  **Call Method:** The service calls a "write" method (e.g., `writeStock()`).
 4.  **Conversion Method:** This method calls a `.toCSV()` instance method (e.g., `stock.toCSV()`) to format the object's data into a comma-separated string.
-5.  **Result:** The string is written as a new line (or overwrites the file) in the corresponding `.csv` file, saving the changes. <br>
+5.  **Result:** The string is written as a new line (or overwrites the file) in the corresponding `.csv` file, saving the changes.
+
 **Example Flow:**
 `Stock` (Object) → `StockMovementService` → `writeStock()` → `stock.toCSV()` → `model.csv`
+
 ---
 
+### Generally,
+
+All data handling in the application follows a standard pattern. When a user performs any data-related action (like logging in, updating stock, or making a sale), the request is always directed to a specific **`Service` class**.
+
+This `Service` class acts as the controller and follows these steps:
+
+1.  **Action Received:** The UI layer (e.g., `ConsoleUI`) receives user input and calls the appropriate `Service` class (like `AuthService` or `StockMovementService`).
+
+2.  **Call Data Method:** The `Service` class calls a data-handling method (like `readEmployees()` or `writeStock()`).
+
+3.  **Use Conversion Method:** This data method is responsible for the final conversion.
+    * **To Read Data:** It reads the `.csv` file and uses a static `fromCSV()` method (e.g., `Employee.fromCSV(line)`) to turn each line of text into a Java object.
+    * **To Write Data:** It takes a Java object and uses an instance method like `toCSV()` (e.g., `stock.toCSV()`) to format the object's data into a text string.
+
+4.  **Get Result:**
+    * A **read** action results in a new **Java Object** (or a list of them) for the application to use.
+    * A **write** action results in the new text string being saved to the **.csv file**.
+
+This pattern consistently separates the business logic (in the `Service` class) from the data conversion logic (in the model's `fromCSV`/`toCSV` methods).
+
+---
 
 
 ## 🤝 How to Contribute
