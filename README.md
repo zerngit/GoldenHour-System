@@ -180,7 +180,7 @@ We use an "Eager Loading" pattern. Data is loaded once at startup, and services 
 
 When adding new features (eg. Sales), you must follow this pattern to maintain data consistency. Do not write your own file readers
 
-**Step 1: Create POJO** Work on `Sales.java` in categories. Implemented the standard conversion methods:
+**Step 1: Create POJO** Work on `example: Sales.java` in categories. Implemented the standard conversion methods:
 
 **Step 2: Update the Handler** Go to `CSVHandler.java` (or create SalesHandler)
 
@@ -192,13 +192,13 @@ public static Sales fromCSV(String line) { ... }
 **Step 3: Update DataLoad** Add a list in `DataLoad.java`
 
 ```
-public static List<Sales> allSales;
+example: public static List<Sales> allSales;
 ```
 
 **Step 4: Load at startup** Add one line in Main.java
 
 ```
-DataLoad.allSales = CSVHandler.readSales();
+example: DataLoad.allSales = CSVHandler.readSales();
 ```
 <br>
 
