@@ -1,2 +1,4 @@
 date,time,customerName,model,quantity,subtotal,transactionMethod,employee
 2025-11-24,11:25 am,Jackson,DW2300-2,1,399.0,e-wallet,Adam bin Abu
+2025-11-28,11:22 pm,Ah Tong,SW2500-1,2,1690.0,card,Adam bin Abu
+2025-11-28,11:24 pm,Ali,DW2400-1,1,599.0,cash,Adam bin Abu

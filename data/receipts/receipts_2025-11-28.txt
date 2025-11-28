@@ -1,0 +1,26 @@
+Sales Receipt
+Date: 2025-11-28
+Time: 11:22 pm
+Outlet: C60
+Customer Name: Ah Tong
+Model Purchased: SW2500-1
+Quantity: 2
+Unit Price: RM845.0
+Subtotal: RM1690.0
+Transaction Method: card
+Employee in Charge: Adam bin Abu
+
+
+Sales Receipt
+Date: 2025-11-28
+Time: 11:24 pm
+Outlet: C60
+Customer Name: Ali
+Model Purchased: DW2400-1
+Quantity: 1
+Unit Price: RM599.0
+Subtotal: RM599.0
+Transaction Method: cash
+Employee in Charge: Adam bin Abu
+
+

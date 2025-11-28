@@ -12,8 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * SalesService - record new sale (one item per sale). Outlet is entered manually (option B).
- * No stock deduction performed (as requested).
+ * SalesService - record new sale (one item per sale). Outlet is entered manually.
+ * No stock deduction performed(can be added if required).
  */
 public class SalesService {
 

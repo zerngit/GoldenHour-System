@@ -50,6 +50,6 @@ public class StockCountService {
             System.out.println("Warning: Please verify stock.");
         }
         System.out.println(period + " stock count completed.");
-
+        sc.close();
     }
 }

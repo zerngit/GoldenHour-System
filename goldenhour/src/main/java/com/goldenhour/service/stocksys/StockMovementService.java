@@ -102,7 +102,7 @@ public class StockMovementService {
         System.out.println(type + " recorded.");
 
         ReceiptHandler.appendReceipt(receipt); // appends to receipts_YYYY-MM-DD.txt
-
+        sc.close();
     }
 
 }
