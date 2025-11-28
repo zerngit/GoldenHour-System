@@ -9,4 +9,5 @@ public class DataLoad {
     public static List<Employee> allEmployees = CSVHandler.readEmployees();
     public static List<Outlet> allOutlets = CSVHandler.readOutlets();
     public static List<Sales> allSales = CSVHandler.readSales();
+    public static List<Attendance> allAttendance = CSVHandler.readAttendance();
 }

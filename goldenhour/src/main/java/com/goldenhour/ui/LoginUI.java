@@ -34,9 +34,10 @@ public class LoginUI {
         while (true) {
             System.out.println("\n=== Main Menu ===");
             System.out.println("1. Register New Employee");
-            System.out.println("2. Stock Management");
-            System.out.println("3. Sales Management");
-            System.out.println("4. Logout");
+            System.out.println("2. Attendance");
+            System.out.println("3. Stock Management");
+            System.out.println("4. Sales Management");
+            System.out.println("5. Logout");
             System.out.print("Choose an option: ");
             String choice = sc.nextLine();
 
@@ -54,14 +55,18 @@ public class LoginUI {
                     break;
 
                 case "2":
+                    AttendanceUI.openAttendanceMenu();
+                    return;
+
+                case "3":
                     StockUI.openStockMenu();
                     return;
                 
-                case "3":
+                case "4":
                     SalesUI.openSalesMenu();
                     break;
 
-                case "4":
+                case "5":
                     AuthService.logout();
                     return;
                 default:
@@ -74,22 +79,27 @@ public class LoginUI {
         while (true) {
             System.out.println("\n=== Main Menu ===");
             // Employee menu: no registration option for non-managers
-            System.out.println("1. Stock Management");
-            System.out.println("2. Sales Management");
-            System.out.println("3. Logout");
+            System.out.println("1. Attendance");
+            System.out.println("2. Stock Management");
+            System.out.println("3. Sales Management");
+            System.out.println("4. Logout");
             System.out.print("Choose an option: ");
             String choice = sc.nextLine();
 
             switch (choice) {
                 case "1":
+                    AttendanceUI.openAttendanceMenu();
+                    break;
+                
+                case "2":
                     StockUI.openStockMenu();
                     break;
 
-                case "2":
+                case "3":
                     SalesUI.openSalesMenu();
                     break;
 
-                case "3":
+                case "4":
                     AuthService.logout();
                     return;
 
