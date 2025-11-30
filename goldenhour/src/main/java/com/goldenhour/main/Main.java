@@ -12,6 +12,7 @@ public class Main {
         DataLoad.allEmployees = CSVHandler.readEmployees();
         DataLoad.allModels = CSVHandler.readStock();
         DataLoad.allOutlets = CSVHandler.readOutlets(); 
+        DataLoad.allAttendance = CSVHandler.readAttendance();
         ///DataLoad.allSales = CSVHandler.readSales();
         System.out.println("Data loaded successfully.\n");
 
