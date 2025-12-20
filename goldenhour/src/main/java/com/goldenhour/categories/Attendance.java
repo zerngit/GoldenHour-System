@@ -45,6 +45,7 @@ public class Attendance {
     }
 
     public static Attendance fromCSV(String line) {
+        
         String[] data = line.split(",");
         for (int i = 0; i < data.length; i++) {
             data[i] = data[i].trim();

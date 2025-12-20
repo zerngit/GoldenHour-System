@@ -1,180 +1,197 @@
 package com.goldenhour.service.salessys;
 
-import com.goldenhour.categories.Model;
-import com.goldenhour.categories.Sales;
-import com.goldenhour.categories.Employee;
+import com.goldenhour.categories.*;
+import com.goldenhour.dataload.DataLoad;
+import com.goldenhour.storage.CSVHandler;
 import com.goldenhour.storage.ReceiptHandler;
 
-import java.io.*;
-import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-/**
- * SalesService - record new sale (one item per sale). Outlet is entered manually.
- * No stock deduction performed(can be added if required).
- */
 public class SalesService {
 
-    private static final String DATA_DIR = "data";
-    private static final String SALES_CSV = DATA_DIR + "/sales.csv";
-    private static final String MODELS_CSV = DATA_DIR + "/model.csv";
-    private static final String OUTLETS_CSV = DATA_DIR + "/outlet.csv";
-    private static final String CSV_HEADER = "date,time,customerName,model,quantity,subtotal,transactionMethod,employee";
-
-    private final Scanner sc = new Scanner(System.in);
-
-    // Ensure data/sales.csv exists and has header
-    private void ensureSalesCsvExists() {
-        try {
-            Path dataDir = Paths.get(DATA_DIR);
-            if (!Files.exists(dataDir)) Files.createDirectories(dataDir);
-
-            Path salesPath = Paths.get(SALES_CSV);
-            if (!Files.exists(salesPath)) {
-                try (BufferedWriter bw = Files.newBufferedWriter(salesPath)) {
-                    bw.write(CSV_HEADER);
-                    bw.newLine();
-                }
-            } else {
-                // ensure header present
-                List<String> lines = Files.readAllLines(salesPath);
-                if (lines.isEmpty() || !lines.get(0).equalsIgnoreCase(CSV_HEADER)) {
-                    lines.add(0, CSV_HEADER);
-                    Files.write(salesPath, lines);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error initializing sales.csv: " + e.getMessage());
-        }
-    }
-
-    // Load outlet codes from data/outlet.csv (first column)
-    private String[] loadOutletCodes() {
-        Path p = Paths.get(OUTLETS_CSV);
-        if (!Files.exists(p)) return new String[0];
-        List<String> codes = new ArrayList<>();
-        try (BufferedReader br = Files.newBufferedReader(p)) {
-            br.readLine(); // skip header
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",", -1);
-                if (parts.length >= 1 && !parts[0].trim().isEmpty()) {
-                    codes.add(parts[0].trim());
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading outlet.csv: " + e.getMessage());
-        }
-        return codes.toArray(new String[0]);
-    }
-
-    // Load models into map modelCode -> Model using Model.fromCSV
-    private Map<String, Model> loadModels() {
-        Map<String, Model> map = new HashMap<>();
-        Path p = Paths.get(MODELS_CSV);
-        if (!Files.exists(p)) return map;
-
-        String[] outletCodes = loadOutletCodes();
-
-        try (BufferedReader br = Files.newBufferedReader(p)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
-                Model m = Model.fromCSV(line, outletCodes);
-                if (m != null) map.put(m.getModelCode().toLowerCase(), m);
-            }
-        } catch (IOException e) {
-            System.out.println("Error loading model.csv: " + e.getMessage());
-        }
-        return map;
-    }
-
-    /**
-     * Interactive sale recording.
-     * @param employee logged-in employee object (must not be null)
-     */
-    public void recordNewSale(Employee employee) {
+    public void recordNewSale(Scanner sc, Employee employee) {
         if (employee == null) {
-            System.out.println("No logged-in employee provided.");
+            System.out.println("Error: No employee logged in.");
             return;
         }
 
-        ensureSalesCsvExists();
-        Map<String, Model> models = loadModels();
-
-        System.out.println("=== Record New Sale ===");
+        System.out.println("\n=== Record New Sale ===");
+        
+        // 1. Shared details for the whole transaction
+        LocalDateTime now = LocalDateTime.now();
+        String dateStr = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String timeStr = now.format(DateTimeFormatter.ofPattern("hh:mm a"));
+        
+        System.out.println("Date: " + dateStr);
+        System.out.println("Time: " + timeStr);
         System.out.print("Customer Name: ");
         String customer = sc.nextLine().trim();
+        System.out.println("Item(s) Purchased: ");
 
-        // Outlet selection (Option B)
-        System.out.print("Enter outlet code (e.g., C60): ");
-        String outletCode = sc.nextLine().trim();
-
-        System.out.print("Enter Model: ");
-        String modelName = sc.nextLine().trim();
-
-        int qty = 0;
+        // 2. Validate Outlet (Once per transaction)
+        String outletCode = "";
         while (true) {
-            System.out.print("Enter Quantity: ");
-            String qStr = sc.nextLine().trim();
-            try {
-                qty = Integer.parseInt(qStr);
-                if (qty <= 0) {
-                    System.out.println("Quantity must be > 0, try again.");
-                    continue;
-                }
+            System.out.print("Enter outlet code (e.g., C60): ");
+            String inputCode = sc.nextLine().trim();
+            boolean exists = DataLoad.allOutlets.stream()
+                    .anyMatch(o -> o.getOutletCode().equalsIgnoreCase(inputCode));
+            
+            if (exists) {
+                outletCode = inputCode.toUpperCase();
                 break;
-            } catch (NumberFormatException ex) {
-                System.out.println("Invalid number. Try again.");
             }
+            System.out.println("Outlet not found.");
         }
 
-        double unitPrice = 0.0;
-        Model m = models.get(modelName.toLowerCase());
-        if (m != null) {
-            unitPrice = m.getPrice();
-        } else {
-            // fallback: ask user for unit price
-            System.out.print("Unit price for this model not found in model.csv. Enter unit price (RM): ");
-            try {
-                unitPrice = Double.parseDouble(sc.nextLine().trim());
-            } catch (Exception e) {
-                unitPrice = 0.0;
-            }
-        }
-        System.out.println("Unit Price: RM" + unitPrice);
+        // --- MULTIPLE ITEM LOOP ---
+        List<Sales> transactionItems = new ArrayList<>();
+        // Tracks how much we are *planning* to buy in this session to prevent over-buying
+        Map<String, Integer> tempStockTracker = new HashMap<>(); 
+        
+        boolean moreItems = true;
+        double grandTotal = 0.0;
 
-        System.out.print("Enter transaction method (cash / card / e-wallet): ");
+        do {
+            System.out.println("\n--- Add Item ---");
+            
+            // A. Find Model
+            Model selectedModel = null;
+            while (selectedModel == null) {
+                System.out.print("Enter Model: ");
+                String inputModel = sc.nextLine().trim();
+                
+                selectedModel = DataLoad.allModels.stream()
+                        .filter(m -> m.getModelCode().equalsIgnoreCase(inputModel) 
+                                  || m.getModelCode().equalsIgnoreCase(inputModel))
+                        .findFirst()
+                        .orElse(null);
+                
+                if (selectedModel == null) System.out.println("Model not found.");
+            }
+
+            // B. Calculate Available Stock (considering items already in cart)
+            int currentRealStock = selectedModel.getStock(outletCode); // FIX: Use outlet stock
+            int alreadyInCart = tempStockTracker.getOrDefault(selectedModel.getModelCode(), 0);
+            int availableForThisEntry = currentRealStock - alreadyInCart;
+
+            if (availableForThisEntry <= 0) {
+                System.out.println("No stock left for this model in this transaction!");
+                continue; // Skip to next loop iteration
+            }
+
+            // C. Enter Quantity
+            int qty = 0;
+            while (true) {
+                System.out.print("Enter Quantity (Available: " + availableForThisEntry + "): ");
+                try {
+                    String input = sc.nextLine().trim();
+                    qty = Integer.parseInt(input);
+                    
+                    if (qty <= 0) {
+                        System.out.println("Quantity must be positive.");
+                    } else if (qty > availableForThisEntry) {
+                        System.out.println("Insufficient stock!");
+                    } else {
+                        break;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number.");
+                }
+            }
+
+            // D. Price & Stage Item
+            double unitPrice = selectedModel.getPrice();
+            double lineSubtotal = unitPrice * qty;
+            grandTotal += lineSubtotal;
+
+            // Create temporary Sales object (Not saved yet!)
+            Sales lineItem = new Sales(dateStr, timeStr, customer, selectedModel.getModelCode(), qty, lineSubtotal, "PENDING", employee.getName());
+            transactionItems.add(lineItem);
+
+            // Update tracker
+            tempStockTracker.put(selectedModel.getModelCode(), alreadyInCart + qty);
+            
+            System.out.println("Item added! Current Total: RM" + grandTotal);
+
+            // E. Ask for more
+            System.out.print("Add another item? (Y/N): ");
+            String choice = sc.nextLine().trim();
+            if (choice.equalsIgnoreCase("N")) {
+                moreItems = false;
+            }
+
+        } while (moreItems);
+
+        // --- FINALIZE TRANSACTION ---
+        if (transactionItems.isEmpty()) {
+            System.out.println("Transaction cancelled (No items added).");
+            return;
+        }
+
+        System.out.println("\nGrand Total: RM" + grandTotal);
+        System.out.print("Enter transaction method (Cash/Card/E-Wallet): ");
         String method = sc.nextLine().trim();
 
-        double subtotal = unitPrice * qty;
-
-        // Date/time
-        LocalDateTime now = LocalDateTime.now();
-        String date = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String time = now.format(DateTimeFormatter.ofPattern("hh:mm a"));
-
-        // Create Sales object
-        Sales sale = new Sales(date, time, customer, modelName, qty, subtotal, method, employee.getName());
-
-        // Append to CSV
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(SALES_CSV, true))) {
-            bw.write(sale.toCSV());
-            bw.newLine();
-        } catch (IOException e) {
-            System.out.println("Error writing to sales.csv: " + e.getMessage());
+        // Check Confirmation
+        System.out.print("Confirm transaction? (Y/N): ");
+        if (!sc.nextLine().trim().equalsIgnoreCase("Y")) {
+            System.out.println("Transaction cancelled.");
+            return;
         }
 
-        // Append to receipt using ReceiptHandler
-        ReceiptHandler.writeSalesReceipt(sale, outletCode, unitPrice);
+        // --- EXECUTE UPDATES ---
+        StringBuilder receiptBody = new StringBuilder();
 
-        System.out.println("\nSubtotal: RM" + subtotal);
-        System.out.println("\nTransaction successful.");
-        System.out.println("Sale recorded successfully.");
-        System.out.println("Receipt saved and sales.csv updated.");
+        for (Sales item : transactionItems) {
+            // 1. Update Payment Method (was PENDING)
+            item.setTransactionMethod(method);
+
+            // 2. Deduct Stock
+            // We must find the model object again to update the static DataLoad list
+            Model m = DataLoad.allModels.stream()
+                    .filter(mod -> mod.getModelCode().equalsIgnoreCase(item.getModel()))
+                    .findFirst().orElse(null);
+            
+            if (m != null) {
+                int current = m.getStock(outletCode);
+                m.setStock(outletCode, current - item.getQuantity());
+            }
+
+            // 3. Save to Memory & File
+            DataLoad.allSales.add(item);
+            CSVHandler.appendSale(item);
+
+            // 4. Build Receipt Line
+            receiptBody.append(String.format("%-15s x%2d  RM%8.2f\n", item.getModel(), item.getQuantity(), item.getSubtotal()));
+        }
+
+        // 5. Update Stock File (Once after all deductions)
+        CSVHandler.writeStock(DataLoad.allModels);
+
+        // 6. Generate Full Receipt String
+        String finalReceipt = 
+                "=== Sales Receipt ===\n" +
+                "Date: " + dateStr + "\n" +
+                "Time: " + timeStr + "\n" +
+                "Outlet: " + outletCode + "\n" +
+                "Customer: " + customer + "\n" +
+                "----------------------------------\n" +
+                "ITEMS PURCHASED:\n" +
+                receiptBody.toString() +
+                "----------------------------------\n" +
+                "Total Items: " + transactionItems.size() + "\n" +
+                "Grand Total: RM " + grandTotal + "\n" +
+                "Method: " + method + "\n" +
+                "Employee: " + employee.getName() + "\n";
+
+        // 7. Save Receipt
+        String fileName = ReceiptHandler.appendSalesReceipt(finalReceipt, "sales");
+
+        System.out.println("\nTransaction \u001B[32msuccessful\u001B[0m.");
+        System.out.println("Sale recorded \u001B[32msuccessfully\u001B[0m.");
+        System.out.println("Model quantities updated \u001B[32msuccessfully\u001B[0m.");
+        System.out.println("Receipt generated: " + fileName);
     }
 }
-

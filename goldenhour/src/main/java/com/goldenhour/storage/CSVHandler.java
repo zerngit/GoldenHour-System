@@ -26,7 +26,7 @@ public class CSVHandler {
     public static List<Employee> readEmployees() {
         List<Employee> employees = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(EMPLOYEE_FILE))) {
-            //br.readLine(); // skip header
+            br.readLine(); // skip header
             String line;
             while ((line = br.readLine()) != null) {
                 employees.add(Employee.fromCSV(line));
@@ -39,6 +39,7 @@ public class CSVHandler {
 
     public static void writeEmployees(List<Employee> employees) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(EMPLOYEE_FILE))) {
+
             for (Employee emp : employees) {
                 bw.write(emp.toCSV());
                 bw.newLine();
@@ -51,6 +52,7 @@ public class CSVHandler {
     public static List<Attendance> readAttendance() {
         List<Attendance> attendance = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(ATTENDANCE_FILE))) {
+            br.readLine(); // skip header
             String line;
             while ((line = br.readLine()) != null) {
                 if (!line.trim().isEmpty()) {
@@ -65,6 +67,8 @@ public class CSVHandler {
 
     public static void writeAttendance(List<Attendance> attendance) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ATTENDANCE_FILE))) {
+            bw.write("EmployeeID,EmployeeName,Date,ClockInTime,ClockOutTime,HoursWorked"); // header
+            bw.newLine();
             for (Attendance att : attendance) {
                 bw.write(att.toCSV());
                 bw.newLine();
@@ -94,10 +98,15 @@ public class CSVHandler {
     }
 
     public static void writeStock(List<Model> stockList) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("data/model.csv"))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(STOCK_FILE))) {
+
+            String[] outletHeaders = {"C60", "C61", "C62", "C63", "C64", "C65", "C66", "C67", "C68", "C69","HQ"};
+            
+            bw.write("Model,Price," + String.join(",", outletHeaders));
+            bw.newLine();
 
             for (Model s : stockList) {
-                bw.write(s.toCSV());
+                bw.write(s.toCSV(outletHeaders));
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -171,6 +180,29 @@ public class CSVHandler {
             }
         } catch (IOException e) {
             System.out.println("Error writing sales file.");
+        }
+
+        
+    }
+
+    /**
+     * Appends a SINGLE sale to the CSV.
+     * Called by SalesService after every transaction.
+     */
+    public static void appendSale(Sales sale) {
+        File f = new File(SALES_FILE);
+        boolean exists = f.exists();
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f, true))) {
+            // Write header if file is new
+            if (!exists) {
+                bw.write("date,time,customerName,model,quantity,subtotal,transactionMethod,employee");
+                bw.newLine();
+            }
+            bw.write(sale.toCSV());
+            bw.newLine();
+        } catch (IOException e) {
+            System.out.println("Error appending to sales file: " + e.getMessage());
         }
     }
 

@@ -1,35 +1,16 @@
 package com.goldenhour.service.salessys;
 
 import com.goldenhour.categories.Sales;
+import com.goldenhour.dataload.DataLoad;
+import com.goldenhour.storage.CSVHandler;
+import java.util.Scanner;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
-
-/**
- * EditSales - interactive edit of sales record identified by date+customer+model.
- */
 public class EditSales {
 
-    private static final String SALES_CSV = "data/sales.csv";
-    private final Scanner sc = new Scanner(System.in);
-
-    public void editSaleInteractive() {
-        Path p = Paths.get(SALES_CSV);
-        if (!Files.exists(p)) {
-            System.out.println("sales.csv not found.");
-            return;
-        }
-
-        List<String> lines;
-        try {
-            lines = Files.readAllLines(p);
-        } catch (IOException e) {
-            System.out.println("Error reading sales.csv: " + e.getMessage());
-            return;
-        }
-
-        // Prompt identification
+    public void editSaleInteractive(Scanner sc) {
+        System.out.println("\n=== Edit Sales Record ===");
+        
+        // 1. Get Identification Details
         System.out.print("Enter transaction date (yyyy-MM-dd): ");
         String date = sc.nextLine().trim();
         System.out.print("Enter customer name: ");
@@ -37,93 +18,84 @@ public class EditSales {
         System.out.print("Enter model name: ");
         String model = sc.nextLine().trim();
 
-        int foundIdx = -1;
-        for (int i = 1; i < lines.size(); i++) { // skip header line 0
-            String[] f = lines.get(i).split(",", -1);
-            if (f.length < 8) continue;
-            String d = f[0].trim();
-            String c = f[2].trim();
-            String m = f[3].trim();
-            if (d.equals(date) && c.equalsIgnoreCase(customer) && m.equalsIgnoreCase(model)) {
-                foundIdx = i;
-                break;
-            }
-        }
+        // 2. Find the object in memory (DataLoad)
+        Sales targetSale = DataLoad.allSales.stream()
+                .filter(s -> s.getDate().equals(date) 
+                          && s.getCustomerName().equalsIgnoreCase(customer)
+                          && s.getModel().equalsIgnoreCase(model))
+                .findFirst()
+                .orElse(null);
 
-        if (foundIdx == -1) {
-            System.out.println("Sale record not found.");
+        if (targetSale == null) {
+            System.out.println("Sale record not found in memory.");
             return;
         }
 
-        String[] fields = lines.get(foundIdx).split(",", -1);
-        Sales sale = Sales.fromCSV(String.join(",", fields));
+        System.out.println("\n=== Sale Record Found ===");
+        System.out.println(targetSale); // Uses Sales.toString()
 
-        System.out.println("\n=== Sale Found ===");
-        System.out.println(sale);
-
-        System.out.println("\nSelect field to edit:");
+        // 3. Menu for Editing
+        System.out.println("\nSelect number to edit:");
         System.out.println("1. Customer Name");
         System.out.println("2. Model");
         System.out.println("3. Quantity");
         System.out.println("4. Total Price (subtotal)");
         System.out.println("5. Transaction Method");
+        System.out.println("6. Cancel");
         System.out.print("> ");
 
-        int choice = 0;
+        String choice = sc.nextLine().trim();
+        boolean changed = false;
+
+        System.out.println();
+
         try {
-            choice = Integer.parseInt(sc.nextLine().trim());
-        } catch (Exception e) {
-            System.out.println("Invalid input.");
+            switch (choice) {
+                case "1":
+                    System.out.print("New Customer Name: ");
+                    targetSale.setCustomerName(sc.nextLine().trim());
+                    changed = true;
+                    break;
+                case "2":
+                    System.out.print("New Model: ");
+                    targetSale.setModel(sc.nextLine().trim());
+                    changed = true;
+                    // Note: Ideally, you should update stock counts here too!
+                    break;
+                case "3":
+                    System.out.print("New Quantity: ");
+                    targetSale.setQuantity(Integer.parseInt(sc.nextLine().trim()));
+                    changed = true;
+                    // Note: Stock update needed here too.
+                    break;
+                case "4":
+                    System.out.print("New Total Price (RM): ");
+                    targetSale.setSubtotal(Double.parseDouble(sc.nextLine().trim()));
+                    changed = true;
+                    break;
+                case "5":
+                    System.out.print("New Transaction Method: ");
+                    targetSale.setTransactionMethod(sc.nextLine().trim());
+                    changed = true;
+                    break;
+                case "6":
+                    System.out.println("Edit cancelled.");
+                    return;
+                default:
+                    System.out.println("Invalid choice.");
+                    return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input format.");
             return;
         }
 
-        switch (choice) {
-            case 1 -> {
-                System.out.print("New Customer Name: ");
-                sale.setCustomerName(sc.nextLine().trim());
-            }
-            case 2 -> {
-                System.out.print("New Model: ");
-                sale.setModel(sc.nextLine().trim());
-            }
-            case 3 -> {
-                System.out.print("New Quantity: ");
-                try {
-                    sale.setQuantity(Integer.parseInt(sc.nextLine().trim()));
-                } catch (Exception ex) {
-                    System.out.println("Invalid number.");
-                    return;
-                }
-            }
-            case 4 -> {
-                System.out.print("New Total Price (RM): ");
-                try {
-                    sale.setSubtotal(Double.parseDouble(sc.nextLine().trim()));
-                } catch (Exception ex) {
-                    System.out.println("Invalid number.");
-                    return;
-                }
-            }
-            case 5 -> {
-                System.out.print("New Transaction Method: ");
-                sale.setTransactionMethod(sc.nextLine().trim());
-            }
-            default -> {
-                System.out.println("Invalid choice.");
-                return;
-            }
-        }
-
-        // replace line
-        lines.set(foundIdx, sale.toCSV());
-
-        try {
-            Files.write(p, lines);
-            System.out.println("Sale record updated successfully!");
-        } catch (IOException e) {
-            System.out.println("Error writing file: " + e.getMessage());
+        // 4. Save Changes (Rewrite the whole file)
+        if (changed) {
+            // Since we modified the object inside DataLoad.allSales, 
+            // the memory is ALREADY updated. We just need to save to disk.
+            CSVHandler.writeSales(DataLoad.allSales);
+            System.out.println("Sale record updated \u001B[32msuccessfully!\u001B[0m");
         }
     }
 }
-
-

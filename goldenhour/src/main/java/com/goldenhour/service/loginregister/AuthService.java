@@ -13,12 +13,12 @@ public class AuthService {
         for (Employee emp : employees) {
             if (emp.getId().equals(id) && emp.getPassword().equals(password)) {
                 currentUser = emp;
-                System.out.println("\nLogin Successful!");
+                System.out.println("\nLogin \u001B[32mSuccessful!\u001B[0m");
                 System.out.println("Welcome, " + emp.getName() + " (" + emp.getId().substring(0, 3) + ")");
                 return true;
             }
         }
-        System.out.println("\nLogin Failed: Invalid User ID or Password");
+        System.out.println("\nLogin \u001B[31mFailed\u001B[31m: " + "\u001B[31m" + "Invalid User ID or Password" + "\u001B[0m");
         return false;
     }
 

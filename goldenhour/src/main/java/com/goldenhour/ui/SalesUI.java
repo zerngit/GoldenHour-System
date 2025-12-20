@@ -51,49 +51,25 @@ public class SalesUI {
             return;
         }
         // Call your interactive service (which already prints the header)
-        salesService.recordNewSale(AuthService.getCurrentUser());
+        salesService.recordNewSale(sc,AuthService.getCurrentUser());
     }
 
     private static void searchSalesMenu() {
-        while (true) {
-            System.out.println("\n=== Search Sales ===");
-            System.out.println("1. By Date");
-            System.out.println("2. By Customer Name");
-            System.out.println("3. By Model Name");
-            System.out.println("4. Back");
-            System.out.print("Choose an option: ");
-            String choice = sc.nextLine().trim();
+        System.out.println("\n=== Search Sales Information ===");
+        System.out.print("Search keyword: ");
+        String keyword = sc.nextLine().trim();
 
-            switch (choice) {
-                case "1":
-                    System.out.print("Enter Date (yyyy-MM-dd): ");
-                    String date = sc.nextLine().trim();
-                    List<Sales> byDate = salesSearch.searchByDate(date);
-                    salesSearch.printSalesList(byDate);
-                    break;
-                case "2":
-                    System.out.print("Enter Customer Name: ");
-                    String customer = sc.nextLine().trim();
-                    List<Sales> byCustomer = salesSearch.searchByCustomer(customer);
-                    salesSearch.printSalesList(byCustomer);
-                    break;
-                case "3":
-                    System.out.print("Enter Model Name: ");
-                    String model = sc.nextLine().trim();
-                    List<Sales> byModel = salesSearch.searchByModel(model);
-                    salesSearch.printSalesList(byModel);
-                    break;
-                case "4":
-                    return;
-                default:
-                    System.out.println("Invalid option.");
-            }
-        }
+       // System.out.println("Searching..."); // Matches your sample output
+
+        // Call the new "smart search" method
+        List<Sales> results = salesSearch.searchByKeyword(keyword);
+        
+        salesSearch.printSalesList(results);
     }
 
     private static void editSalesMenu() {
-        System.out.println("\n=== Edit Sale ===");
-        editSales.editSaleInteractive();
+        // Pass the static scanner 'sc' to the method
+        editSales.editSaleInteractive(sc); 
     }
 }
 

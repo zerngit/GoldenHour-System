@@ -6,43 +6,50 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class ReceiptHandler {
-    public static void appendReceipt(String receiptText) {
+
+    /**
+     * Appends receipt text to a daily file.
+     * Returns the filename used.
+     */
+    public static String appendReceipt(String receiptText) {
         String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         File dir = new File("data/receipts");
         if (!dir.exists()) dir.mkdirs();
-        String filename = "data/receipts/receipts_" + date + ".txt";
+        
+        // Changed prefix to 'sales_' to match your sample output
+        String shortFilename = "receipts_" + date + ".txt";
+        String fullPath = "data/receipts/" + shortFilename;
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename, true))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fullPath, true))) {
             bw.write(receiptText);
             bw.newLine();
+            bw.write("--------------------------------------------------"); // Separator between receipts
             bw.newLine();
         } catch (IOException e) {
             System.out.println("Error writing receipt file.");
         }
+        return shortFilename;
     }
 
-    /**
-     * Write a sales receipt using the same style as other receipts.
-     * outletCode may be null or empty; it's included in the receipt for traceability.
-     * unitPrice is the per-unit price (for printing); subtotal is sale.getSubtotal().
-     */
-    public static void writeSalesReceipt(Sales sale, String outletCode, double unitPrice) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Sales Receipt").append(System.lineSeparator());
-        sb.append("Date: ").append(sale.getDate()).append(System.lineSeparator());
-        sb.append("Time: ").append(sale.getTime()).append(System.lineSeparator());
-        if (outletCode != null && !outletCode.isEmpty()) {
-            sb.append("Outlet: ").append(outletCode).append(System.lineSeparator());
+    public static String appendSalesReceipt(String receiptText, String filePrefix) {
+        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        
+        File dir = new File("data/receipts");
+        if (!dir.exists()) dir.mkdirs();
+
+        // Dynamically creates "sales_2024-10-13.txt" or "stock_2024-10-13.txt"
+        String shortFilename = filePrefix + "_" + date + ".txt";
+        String fullPath = "data/receipts/" + shortFilename;
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fullPath, true))) {
+            bw.write(receiptText);
+            bw.newLine();
+            bw.write("--------------------------------------------------"); 
+            bw.newLine();
+        } catch (IOException e) {
+            System.out.println("Error writing receipt file: " + e.getMessage());
         }
-        sb.append("Customer Name: ").append(sale.getCustomerName()).append(System.lineSeparator());
-        sb.append("Model Purchased: ").append(sale.getModel()).append(System.lineSeparator());
-        sb.append("Quantity: ").append(sale.getQuantity()).append(System.lineSeparator());
-        sb.append("Unit Price: RM").append(unitPrice).append(System.lineSeparator());
-        sb.append("Subtotal: RM").append(sale.getSubtotal()).append(System.lineSeparator());
-        sb.append("Transaction Method: ").append(sale.getTransactionMethod()).append(System.lineSeparator());
-        sb.append("Employee in Charge: ").append(sale.getEmployee()).append(System.lineSeparator());
-
-        appendReceipt(sb.toString());
+        return shortFilename;
     }
+    
 }
-

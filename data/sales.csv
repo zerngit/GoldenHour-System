@@ -1,4 +1,15 @@
 date,time,customerName,model,quantity,subtotal,transactionMethod,employee
-2025-11-24,11:25 am,Jackson,DW2300-2,1,399.0,e-wallet,Adam bin Abu
+2025-11-24,11:25 am,Jackson,DW2300-2,1,399.0,E-wallet,Adam bin Abu
 2025-11-28,11:22 pm,Ah Tong,SW2500-1,2,1690.0,card,Adam bin Abu
 2025-11-28,11:24 pm,Ali,DW2400-1,1,599.0,cash,Adam bin Abu
+2025-12-19,06:27 PM,Lee Zii Jia,DW2300-2,2,798.0,card,Tan Guan Han
+2025-12-19,07:00 PM,Lee Zii Jia,DW2300-3,2,698.0,cash,Tan Guan Han
+2025-12-19,07:02 PM,Lee Jia Jie,DW2300-3,5,1745.0,card,Tan Guan Han
+2025-12-19,10:10 PM,Teh Xu Zhe,DW2300-1,1,399.0,Credit card,Tan Guan Han
+2025-12-19,10:11 PM,Adam,DW2400-1,2,1198.0,Credit card,Tan Guan Han
+2025-12-19,10:25 PM,Aminuddin,DW2300-1,2,798.0,Credit Card,Tan Guan Han
+2025-12-19,10:26 PM,Aminuddin,DW2400-1,1,599.0,E Wallet,Tan Guan Han
+2025-12-19,10:49 PM,Tan Ah Seng,SW2400-1,1,789.0,Cash,Tan Guan Han
+2025-12-19,10:49 PM,Tan Ah Seng,SW2400-3,1,769.0,Cash,Tan Guan Han
+2025-12-19,11:01 PM,Chingy,DW2300-2,1,399.0,E-Wallet,Tan Guan Han
+2025-12-19,11:01 PM,Chingy,SW2400-3,1,769.0,Cash,Tan Guan Han

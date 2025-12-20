@@ -54,6 +54,9 @@ public class Model {
         double price = Double.parseDouble(data[1]);
         Model model = new Model(modelCode, price);
 
+        // Starting from index 2, each value corresponds to stock quantity for each outlet
+        // The outletCodes array provides the mapping of index to outlet code
+        // Loop through the stock quantities and assign them to the correct outlet
         for (int i = 2; i < data.length; i++) {
 
             int outletIndex = i-2;
@@ -68,7 +71,7 @@ public class Model {
         return model;
     }
 
-    public String toCSV() {
+    public String toCSV(String[] outletCodes) {
 
         // Since the stockPerOutlet keys are dynamic, we need to serialize them in a way that matches the CSV structure
         // String.join cannot be used directly here as we need to ensure the order of outlets matches the CSV header
@@ -82,8 +85,8 @@ public class Model {
 
         StringBuilder sb = new StringBuilder();
         sb.append(modelCode).append(",").append(price);
-        for (String outlet : stockPerOutlet.keySet()) {
-            sb.append(",").append(stockPerOutlet.get(outlet));
+        for (String code : outletCodes) {
+            sb.append(",").append(getStock(code));
         }
         return sb.toString();
     }

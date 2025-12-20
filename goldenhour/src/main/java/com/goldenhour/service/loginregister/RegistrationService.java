@@ -21,6 +21,6 @@ public class RegistrationService {
 
         employees.add(new Employee(id, name, role, password));
         CSVHandler.writeEmployees(employees);
-        System.out.println("\nEmployee successfully registered!");
+        System.out.println("\nEmployee \u001B[32msuccessfully registered!\u001B[0m");
     }
 }

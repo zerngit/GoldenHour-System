@@ -30,26 +30,26 @@ public class StockCountService {
                 int counted = Integer.parseInt(sc.nextLine());
                 System.out.println("Store Record: " + s.getStock(o.getOutletCode()));
 
-                totalChecked++;
-
                 if (counted == s.getStock(o.getOutletCode())) {
-                    System.out.println("Stock tally correct.");
+                    System.out.println("\u001B[32mStock tally correct\u001B[0m.");
                     tallyCorrect++;
                 } else {
-                    System.out.println("! Mismatch detected (" + Math.abs(counted - s.getStock(o.getOutletCode())) + " unit difference)");
+                    System.out.println("\u001B[31m! Mismatch detected (" + Math.abs(counted - s.getStock(o.getOutletCode())) + " unit difference)\u001B[0m");
                     mismatches++;
                 }
             }
+
+            totalChecked++;
         }
 
         System.out.println("\nTotal Models Checked: " + totalChecked);
-        System.out.println("Tally Correct: " + tallyCorrect);
-        System.out.println("Mismatches: " + mismatches);
+        System.out.println("Tally \u001B[32mCorrect\u001B[0m: " + tallyCorrect);
+        System.out.println("\u001B[31mMismatches\u001B[0m: " + mismatches);
 
         if (mismatches > 0) {
-            System.out.println("Warning: Please verify stock.");
+            System.out.println("\u001B[31mWarning: Please verify stock\u001B[0m.");
         }
-        System.out.println(period + " stock count completed.");
-        sc.close();
+        System.out.println(period + " stock count \u001B[32mcompleted\u001B[0m.");
+        //sc.close();
     }
 }

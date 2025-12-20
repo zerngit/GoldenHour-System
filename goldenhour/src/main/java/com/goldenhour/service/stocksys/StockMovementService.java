@@ -15,6 +15,9 @@ public class StockMovementService {
         List<Outlet> outlets = DataLoad.allOutlets;
         List<String> movementDetails = new ArrayList<>();
 
+        System.out.println("\n=== " + type + " ===");
+        System.out.println("Date : " + TimeUtils.getDate());
+        System.out.println("Time : " + TimeUtils.getTime());
         System.out.print("From: ");
         String from = sc.nextLine().trim();
         System.out.print("To: ");
@@ -61,7 +64,7 @@ public class StockMovementService {
                     m.setStock(to, current + qty);
                 }
 
-                movementDetails.add("- " + m.getModelCode() + " (Quantity:" + qty + ")");
+                movementDetails.add("- " + m.getModelCode() + " (Quantity: " + qty + ")");
                 totalQty += qty;
             } else {
                 System.out.println("Model not found: " + code);
@@ -98,11 +101,11 @@ public class StockMovementService {
 
         System.out.println(receipt);
         System.out.println();
-        System.out.println("Model quantities updated successfully.");
-        System.out.println(type + " recorded.");
+        System.out.println("Model quantities updated \u001B[32msuccessfully\u001B[0m.");
+        System.out.println(type + " \u001B[32mrecorded\u001B[0m.");
 
         ReceiptHandler.appendReceipt(receipt); // appends to receipts_YYYY-MM-DD.txt
-        sc.close();
+        //sc.close();
     }
 
 }
