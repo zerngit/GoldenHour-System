@@ -7,6 +7,8 @@ import javax.swing.SwingUtilities;
 
 public class MainGUI {
     public static void main(String[] args) {
+        AutoEmail.startDailyScheduler();
+
         // 1. Load Data (Same as Console!)
         System.out.println("Starting GUI Application...");
         DataLoad.loadAllData();

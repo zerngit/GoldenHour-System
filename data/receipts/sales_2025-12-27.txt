@@ -1,0 +1,15 @@
+=== Sales Receipt ===
+Date: 2025-12-27
+Time: 07:58 pm
+Outlet: C60
+Customer: Jeff Bezos
+----------------------------------
+ITEMS PURCHASED:
+DW2400-1           x 1   RM   599.00
+----------------------------------
+Total Items: 1
+Grand Total: RM 599.00
+Method: Cash
+Employee: Wong Benedict
+
+--------------------------------------------------
