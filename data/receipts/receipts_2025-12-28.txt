@@ -1,0 +1,10 @@
+=== Stock Out ===
+Date: 2025-12-28
+Time: 10:20:47
+From: C60 (Kuala Lumpur City Centre)
+To: C68 (1 Utama)
+Models:
+- DW2300-4: 4
+Total Quantity: 4
+Employee in Charge: Tan Guan Han
+--------------------------------------------------

@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "SyncSQLtoCSV",
+      "request": "launch",
+      "mainClass": "com.goldenhour.main.SyncSQLtoCSV",
+      "projectName": "goldenhour"
+    },
+    {
+      "type": "java",
       "name": "MainGUI",
       "request": "launch",
       "mainClass": "com.goldenhour.main.MainGUI",

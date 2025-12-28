@@ -1,5 +1,44 @@
 === Sales Receipt ===
 Date: 2025-12-19
+Time: 06:27 PM
+Outlet: C61
+Customer Name: Lee Zii Jia
+Model Purchased: DW2300-2
+Quantity: 2
+Unit Price: RM399.0
+Subtotal: RM798.0
+Transaction Method: card
+Employee in Charge: Tan Guan Han
+
+--------------------------------------------------
+=== Sales Receipt ===
+Date: 2025-12-19
+Time: 07:00 PM
+Outlet: C61
+Customer Name: Lee Zii Jia
+Model Purchased: DW2300-3
+Quantity: 2
+Unit Price: RM349.0
+Subtotal: RM698.0
+Transaction Method: cash
+Employee in Charge: Tan Guan Han
+
+--------------------------------------------------
+=== Sales Receipt ===
+Date: 2025-12-19
+Time: 07:02 PM
+Outlet: C61
+Customer Name: Lee Jia Jie
+Model Purchased: DW2300-3
+Quantity: 5
+Unit Price: RM349.0
+Subtotal: RM1745.0
+Transaction Method: card
+Employee in Charge: Tan Guan Han
+
+--------------------------------------------------
+=== Sales Receipt ===
+Date: 2025-12-19
 Time: 10:10 PM
 Outlet: C60
 Customer Name: Teh Xu Zhe
@@ -47,6 +86,7 @@ Unit Price: RM599.0
 Subtotal: RM599.0
 Transaction Method: E Wallet
 Employee in Charge: Tan Guan Han
+
 --------------------------------------------------
 === Sales Receipt ===
 Date: 2025-12-19
@@ -62,6 +102,7 @@ Total Items: 2
 Grand Total: RM 1558.0
 Method: Cash
 Employee: Tan Guan Han
+
 --------------------------------------------------
 === Sales Receipt ===
 Date: 2025-12-19
@@ -78,64 +119,4 @@ Grand Total: RM 1168.0
 Method: E-Wallet
 Employee: Tan Guan Han
 
---------------------------------------------------
-=== Stock In ===
-Date: 2025-12-19
-Time: 11:04 PM
-From: HQ (Headquarter)
-To: C67 (Pavillion Kuala Lumpur)
-Models:
-- DW2300-1 (Quantity:1)
-Total Quantity: 1
-Employee in Charge: Tan Guan Han
---------------------------------------------------
-=== Stock In ===
-Date: 2025-12-19
-Time: 11:05 PM
-From: HQ (Headquarter)
-To: C67 (Pavillion Kuala Lumpur)
-Models:
-- DW2300-1 (Quantity:3)
-Total Quantity: 3
-Employee in Charge: Tan Guan Han
---------------------------------------------------
-=== Stock In ===
-Date: 2025-12-19
-Time: 11:07 PM
-From: HQ (Headquarter)
-To: C67 (Pavillion Kuala Lumpur)
-Models:
-- DW2300-1 (Quantity:2)
-Total Quantity: 2
-Employee in Charge: Tan Guan Han
---------------------------------------------------
-=== Stock In ===
-Date: 2025-12-19
-Time: 11:08 PM
-From: q ()
-To: q ()
-Models:
-
-Total Quantity: 0
-Employee in Charge: Tan Guan Han
---------------------------------------------------
-=== Stock In ===
-Date: 2025-12-19
-Time: 11:08 PM
-From: HQ (Headquarter)
-To: C67 (Pavillion Kuala Lumpur)
-Models:
-- DW2300-1 (Quantity:3)
-Total Quantity: 3
-Employee in Charge: Tan Guan Han
---------------------------------------------------
-=== Stock In ===
-Date: 2025-12-19
-Time: 11:11 PM
-From: HQ (Headquarter)
-To: C67 (Pavillion Kuala Lumpur)
-Models:
-- DW2300-1 (Quantity:2)
-Total Quantity: 2
-Employee in Charge: Tan Guan Han
 --------------------------------------------------

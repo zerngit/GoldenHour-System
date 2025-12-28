@@ -1,42 +1,30 @@
 date,time,customerName,model,quantity,subtotal,transactionMethod,employee
-2025-11-24,11:25 am,Jackson,DW2300-2,1,399.0,E-wallet,Adam bin Abu
-2025-11-28,11:22 pm,Ah Tong,SW2500-1,2,1690.0,card,Adam bin Abu
-2025-11-28,11:24 pm,Ali,DW2400-1,1,599.0,cash,Adam bin Abu
-2025-12-19,06:27 PM,Lee Zii Jia,DW2300-2,2,798.0,card,Tan Guan Han
-2025-12-19,07:00 PM,Lee Zii Jia,DW2300-3,2,698.0,cash,Tan Guan Han
-2025-12-19,07:02 PM,Lee Jia Jie,DW2300-3,5,1745.0,card,Tan Guan Han
-2025-12-19,10:10 PM,Teh Xu Zhe,DW2300-1,1,399.0,Credit card,Tan Guan Han
-2025-12-19,10:11 PM,Adam,DW2400-1,2,1198.0,Credit card,Tan Guan Han
-2025-12-19,10:25 PM,Aminuddin,DW2300-1,2,798.0,Credit Card,Tan Guan Han
-2025-12-19,10:26 PM,Aminuddin,DW2400-1,1,599.0,E Wallet,Tan Guan Han
-2025-12-19,10:49 PM,Tan Ah Seng,SW2400-1,1,789.0,Cash,Tan Guan Han
-2025-12-19,10:49 PM,Tan Ah Seng,SW2400-3,1,769.0,Cash,Tan Guan Han
-2025-12-19,11:01 PM,Chingy,DW2300-2,1,399.0,E-Wallet,Tan Guan Han
-2025-12-19,11:01 PM,Chingy,SW2400-3,1,769.0,E-Wallet,Tan Guan Han
-2025-12-20,10:09 PM,Lee Zii Jia,DW2300-1,1,399.0,Credit Card,Tan Guan Han
-2025-12-20,11:23 PM,Ching Chong,DW2300-1,2,798.0,E-Wallet,Tan Guan Han
-2025-12-21,12:05 AM,Walk-in Customer,DW2300-1,1,399.0,Credit Card,Tan Guan Han
-2025-12-21,12:08 AM,Tay Zheheng,SW2400-2,1,769.0,Card,test
-2025-12-21,12:08 AM,Tay Zheheng,SW2500-1,2,1690.0,Card,test
-2025-12-21,12:09 AM,pong,SW2500-4,1,825.0,Card,test
-2025-12-21,12:11 AM,Lee Zii Jia,DW2300-3,1,349.0,Card,test
-2025-12-21,12:15 AM,Tay Zheheng,DW2300-3,1,349.0,Card,test
-2025-12-21,01:46 PM,Tay Zheheng,SW2500-4,1,825.0,Card,Tan Guan Han
-2025-12-21,01:47 PM,Tay Zheheng,DW2300-1,1,399.0,Cash,Tan Guan Han
-2025-12-21,01:53 PM,Testing,DW2300-1,1,399.0,Card,Tan Guan Han
-2025-12-21,02:00 PM,Tay Zheheng,SW2400-2,1,769.0,Card,Tan Guan Han
-2025-12-21,02:12 PM,Testing,SW2400-1,1,789.0,Card,Tan Guan Han
-2025-12-21,02:14 PM,Testing,SW2500-2,1,845.0,Card,Tan Guan Han
-2025-12-21,02:26 PM,T,SW2400-1,1,789.0,Card,Tan Guan Han
-2025-12-21,02:30 PM,tung,DW2400-1,1,599.0,Card,Tan Guan Han
-2025-12-21,02:32 PM,tung,DW2300-1,1,399.0,Card,Tan Guan Han
-2025-12-21,02:37 PM,Tungtungtung,SW2500-1,1,845.0,Card,Tan Guan Han
-2025-12-21,02:38 PM,Xi Jin Ping,SW2500-1,1,845.0,Card,Tan Guan Han
-2025-12-21,02:55 PM,tay,SW2400-2,1,769.0,Card,Tan Guan Han
-2025-12-21,03:03 PM,Xuzhe,DW2300-3,1,349.0,Card,Tan Guan Han
-2025-12-21,10:24 PM,tan,DW2400-1,1,599.0,Card,test
-2025-12-22,11:12 PM,mingli,DW2400-1,1,599.0,Card,Test Manager
-2025-12-22,11:39 PM,Chen Da Nao,SW2400-1,3,2367.0,Card,Test Manager
-2025-12-22,11:58 PM,shawn,SW2400-1,1,789.0,Card,Test Manager
-2025-12-22,11:59 PM,cristiano,SW2400-1,1,789.0,Cash,Test Manager
-2025-12-23,12:00 AM,david beckham,SW2400-1,3,2367.0,E-Wallet,Test Manager
+2025-11-24,11:25 am,Jackson,DW2300-2,1,399.0,E-wallet,Adam bin Abu,C60,C6002
+2025-11-28,11:22 pm,Ah Tong,SW2500-1,2,1690.0,card,Adam bin Abu,C60,C6002
+2025-11-28,11:24 pm,Ali,DW2400-1,1,599.0,cash,Adam bin Abu,C60,C6002
+2025-12-19,06:27 PM,Lee Zii Jia,DW2300-2,2,798.0,card,Tan Guan Han,C61,C6001
+2025-12-19,07:00 PM,Lee Zii Jia,DW2300-3,2,698.0,cash,Tan Guan Han,C61,C6001
+2025-12-19,07:02 PM,Lee Jia Jie,DW2300-3,5,1745.0,card,Tan Guan Han,C61,C6001
+2025-12-19,10:10 PM,Teh Xu Zhe,DW2300-1,1,399.0,Credit card,Tan Guan Han,C60,C6001
+2025-12-19,10:11 PM,Adam,DW2400-1,2,1198.0,Credit card,Tan Guan Han,C60,C6001
+2025-12-19,10:25 PM,Aminuddin,DW2300-1,2,798.0,Credit Card,Tan Guan Han,C69,C6001
+2025-12-19,10:26 PM,Aminuddin,DW2400-1,1,599.0,E Wallet,Tan Guan Han,C69,C6001
+2025-12-19,10:49 PM,Tan Ah Seng,SW2400-1,1,789.0,Cash,Tan Guan Han,C60,C6001
+2025-12-19,10:49 PM,Tan Ah Seng,SW2400-3,1,769.0,Cash,Tan Guan Han,C60,C6001
+2025-12-19,11:01 PM,Chingy,DW2300-2,1,399.0,E-Wallet,Tan Guan Han,C67,C6001
+2025-12-19,11:01 PM,Chingy,SW2400-3,1,769.0,E-Wallet,Tan Guan Han,C67,C6001
+2025-12-21,01:47 PM,Tay Zheheng,DW2300-1,1,399.0,Cash,Tan Guan Han,C63,C6001
+2025-12-21,01:53 PM,Testing,DW2300-1,1,399.0,Card,Tan Guan Han,C62,C6001
+2025-12-21,02:30 PM,tung,DW2400-1,1,599.0,Card,Tan Guan Han,C62,C6001
+2025-12-21,02:32 PM,tung,DW2300-1,1,399.0,Card,Tan Guan Han,C62,C6001
+2025-12-21,02:37 PM,Tungtungtung,SW2500-1,1,845.0,Card,Tan Guan Han,C62,C6001
+2025-12-21,02:55 PM,tay,SW2400-2,1,769.0,Card,Tan Guan Han,C60,C6001
+2025-12-21,10:24 PM,tan,DW2400-1,1,599.0,Card,test,C60,test
+2025-12-22,11:12 PM,mingli,DW2400-1,1,599.0,Card,Test Manager,C60,tess
+2025-12-22,11:39 PM,Chen Da Nao,SW2400-1,3,2367.0,Card,Test Manager,C60,tess
+2025-12-22,11:58 PM,shawn,SW2400-1,1,789.0,Card,Test Manager,C60,tess
+2025-12-22,11:59 PM,cristiano,SW2400-1,1,789.0,Cash,Test Manager,C60,tess
+2025-12-23,12:00 AM,david beckham,SW2400-1,3,2367.0,E-Wallet,Test Manager,C60,tess
+2025-12-28,12:30 AM,Alex,SW2400-3,1,769.0,Card,Tan Guan Han,C63,C6001
+2025-12-28,10:21 AM,Venice,SW2400-3,1,769.0,Cash,Tan Guan Han,C68,C6001
+2025-12-28,10:31 AM,Rayan,SW2400-2,2,1538.0,Card,Test Manager,C65,tess

@@ -207,11 +207,12 @@ public class DatabaseViewerPanel extends BackgroundPanel {
                     // 1. Fetch Fresh
                     DataLoad.allSales = DatabaseHandler.fetchAllSales();
                     
-                    tableModel.setColumnIdentifiers(new String[]{"Date", "Time", "Customer", "Model", "Total (RM)", "Method"});
+                    tableModel.setColumnIdentifiers(new String[]{"Date", "Time","Outlet", "Customer", "Model", "Total (RM)", "Method"});
                     for (Sales s : DataLoad.allSales) {
                         tableModel.addRow(new Object[]{
                             s.getDate(), 
                             s.getTime(), 
+                            s.getOutletCode(),
                             s.getCustomerName(), 
                             s.getModel(), 
                             s.getSubtotal(), 

@@ -108,7 +108,7 @@ public class SalesService {
             grandTotal += lineSubtotal;
 
             // Create temporary Sales object (Not saved yet!)
-            Sales lineItem = new Sales(dateStr, timeStr, customer, selectedModel.getModelCode(), qty, lineSubtotal, "PENDING", employee.getName());
+            Sales lineItem = new Sales(dateStr, timeStr, customer, selectedModel.getModelCode(), qty, lineSubtotal, "PENDING", employee.getName(),outletCode,employee.getId());
             transactionItems.add(lineItem);
 
             // Update tracker

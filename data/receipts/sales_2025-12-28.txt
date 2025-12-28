@@ -1,0 +1,45 @@
+=== Sales Receipt ===
+Date: 2025-12-28
+Time: 12:30 AM
+Outlet: C63
+Customer: Alex
+----------------------------------
+ITEMS PURCHASED:
+SW2400-3           x 1   RM   769.00
+----------------------------------
+Total Items: 1
+Grand Total: RM 769.00
+Method: Card
+Employee: Tan Guan Han
+
+--------------------------------------------------
+=== Sales Receipt ===
+Date: 2025-12-28
+Time: 10:22 AM
+Outlet: C68
+Customer: Venice
+----------------------------------
+ITEMS PURCHASED:
+SW2400-3           x 1   RM   769.00
+----------------------------------
+Total Items: 1
+Grand Total: RM 769.00
+Method: Cash
+Employee: Tan Guan Han
+
+--------------------------------------------------
+=== Sales Receipt ===
+Date: 2025-12-28
+Time: 10:31 AM
+Outlet: C65
+Customer: Rayan
+----------------------------------
+ITEMS PURCHASED:
+SW2400-2        x 2  RM 1538.00
+----------------------------------
+Total Items: 1
+Grand Total: RM 1538.0
+Method: Card
+Employee: Test Manager
+
+--------------------------------------------------

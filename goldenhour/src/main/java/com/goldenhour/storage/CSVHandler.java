@@ -185,6 +185,26 @@ public class CSVHandler {
         
     }
 
+    public static void writeOutlets(List<Outlet> outlets) {
+        // Adjust the path if your CSV is in a different folder
+        File file = new File(OUTLET_FILE); 
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            // Optional: Write header if your CSVs usually have them
+            // bw.write("outlet_code,outlet_name");
+            // bw.newLine();
+
+            for (Outlet o : outlets) {
+                // Format: code,name
+                String line = o.getOutletCode() + "," + o.getOutletName();
+                bw.write(line);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing outlets CSV: " + e.getMessage());
+        }
+    }
+
     /**
      * Appends a SINGLE sale to the CSV.
      * Called by SalesService after every transaction.

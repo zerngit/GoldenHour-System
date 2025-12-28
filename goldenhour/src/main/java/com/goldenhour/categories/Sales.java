@@ -10,12 +10,14 @@ public class Sales {
     private double subtotal;
     private String transactionMethod;
     private String employee;
+    private String outletCode;
+    private String employeeId;
 
     public Sales() {
 
     }
     public Sales(String date, String time, String customerName, String model,
-                 int quantity, double subtotal, String transactionMethod, String employee) {
+                 int quantity, double subtotal, String transactionMethod, String employee, String outletCode, String employeeId) {
         this.date = date;
         this.time = time;
         this.customerName = customerName;
@@ -24,6 +26,8 @@ public class Sales {
         this.subtotal = subtotal;
         this.transactionMethod = transactionMethod;
         this.employee = employee;
+        this.outletCode = outletCode;
+        this.employeeId = employeeId;
     }
 
     // Getters
@@ -35,6 +39,8 @@ public class Sales {
     public double getSubtotal() { return subtotal; }
     public String getTransactionMethod() { return transactionMethod; }
     public String getEmployee() { return employee; }
+    public String getOutletCode() { return outletCode; }
+    public String getEmployeeId() { return employeeId; }
 
     // Setters (used by EditSales)
     public void setCustomerName(String customerName) { this.customerName = customerName; }
@@ -45,6 +51,8 @@ public class Sales {
     public void setEmployee(String employee) { this.employee = employee; }
     public void setDate(String date) { this.date = date; }
     public void setTime(String time) { this.time = time; }
+    public void setOutletCode(String outletCode) { this.outletCode = outletCode; }
+    public void setEmployeeId(String employeeId) { this.employeeId = employeeId; }
 
     public String toCSV() {
         return String.join(",",
@@ -55,7 +63,9 @@ public class Sales {
                 String.valueOf(quantity),
                 String.valueOf(subtotal),
                 transactionMethod,
-                employee
+                employee,
+                (outletCode == null ? "Unknown" : outletCode),
+                (employeeId == null ? "Unknown" : employeeId)
         );
     }
 
@@ -70,19 +80,27 @@ public class Sales {
         double subtotal = data.length > 5 && !data[5].trim().isEmpty() ? Double.parseDouble(data[5].trim()) : 0.0;
         String method = data.length > 6 ? data[6].trim() : "";
         String employee = data.length > 7 ? data[7].trim() : "";
-        return new Sales(date, time, customer, model, qty, subtotal, method, employee);
+
+        // Handle new fields safely (in case reading old CSV file)
+        String outlet = data.length > 8 ? data[8].trim() : "Unknown";
+        String empId = data.length > 9 ? data[9].trim() : "Unknown";
+
+        return new Sales(date, time, customer, model, qty, subtotal, method, employee,outlet,empId);
     }
 
     @Override
     public String toString() {
         return "Date: " + date +
                 "\nTime: " + time +
+                "\nOutlet: " + outletCode +
                 "\nCustomer: " + customerName +
                 "\nModel: " + model +
                 "\nQuantity: " + quantity +
                 "\nTotal: RM" + subtotal +
                 "\nMethod: " + transactionMethod +
-                "\nEmployee: " + employee;
+                "\nEmployee: " + employee + 
+                "\nEmployee ID: "+ employeeId ;
+                
     }
 }
 

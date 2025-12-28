@@ -156,6 +156,19 @@ public class DatabaseHandler {
                 s.setSubtotal(rs.getDouble("subtotal"));
                 s.setTransactionMethod(rs.getString("method"));
                 s.setEmployee(rs.getString("employee_name"));
+
+                // --- NEW FIELDS ---
+                // If your DB table doesn't have these columns yet, this will crash!
+                // Make sure to add them or handle SQLException.
+                try {
+                    s.setOutletCode(rs.getString("outlet_code"));
+                    s.setEmployeeId(rs.getString("employee_id"));
+                } catch (SQLException e) {
+                    // Column might not exist in old DB version, set defaults
+                    s.setOutletCode("Unknown");
+                    s.setEmployeeId("Unknown");
+                }
+
                 list.add(s);
             }
         } catch (SQLException e) { e.printStackTrace(); }
@@ -185,7 +198,7 @@ public class DatabaseHandler {
     // ==========================================
 
     public static void saveSale(Sales s) {
-        String sql = "INSERT INTO sales(date, time, customer_name, model_code, quantity, subtotal, method, employee_name) VALUES(?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO sales(date, time, customer_name, model_code, quantity, subtotal, method, employee_name, outlet_code, employee_id) VALUES(?,?,?,?,?,?,?,?,?,?)";
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, s.getDate());
             pstmt.setString(2, s.getTime());
@@ -195,6 +208,10 @@ public class DatabaseHandler {
             pstmt.setDouble(6, s.getSubtotal());
             pstmt.setString(7, s.getTransactionMethod());
             pstmt.setString(8, s.getEmployee());
+
+            // --- NEW VALUES ---
+            pstmt.setString(9, s.getOutletCode());
+            pstmt.setString(10, s.getEmployeeId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error saving sale: " + e.getMessage());

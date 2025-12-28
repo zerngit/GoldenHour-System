@@ -16,9 +16,23 @@ public class Model {
         this.stockPerOutlet = new HashMap<>();
     }
 
+    // This allows us to create an empty Model object and fill it in later
+    public Model() {
+        // Initialize the map so we don't get NullPointerException later
+        this.stockPerOutlet = new HashMap<>();
+    }
+
     public void setStock(String outletCode, int quantity) {
         stockPerOutlet.put(outletCode, quantity);
 
+    }
+
+    public void setModelCode(String modelCode) {
+        this.modelCode = modelCode;
+    }
+
+    public void setStockPerOutlet(Map<String, Integer> stockPerOutlet) {
+        this.stockPerOutlet = stockPerOutlet;
     }
 
     public int getStock(String outletCode) {

@@ -1,5 +1,6 @@
 package com.goldenhour.gui.pos;
 
+import com.goldenhour.categories.Employee;
 import com.goldenhour.categories.Model;
 import com.goldenhour.categories.Sales;
 import com.goldenhour.dataload.DataLoad;
@@ -41,7 +42,6 @@ public class POSPanel extends BackgroundPanel {
 
     public POSPanel() {
         setLayout(new BorderLayout(0, 20));
-        //setBackground(new Color(245, 247, 250));
         setBorder(new EmptyBorder(20, 30, 30, 30));
 
         // 1. TOP PROGRESS BAR
@@ -189,13 +189,33 @@ public class POSPanel extends BackgroundPanel {
             if(qtyStr == null) return;
             try {
                 int qty = Integer.parseInt(qtyStr);
-                // Simple logic check (omitted complex stock validation for brevity, reuse old logic if needed)
+                
                 if(qty > 0 && qty <= stock) {
-                    Sales s = new Sales(TimeUtils.getDate(), TimeUtils.getTime(), "Walk-in", code, qty, price*qty, "PENDING", AuthService.getCurrentUser().getName());
+                    Employee user = AuthService.getCurrentUser();
+                    String empName = (user != null) ? user.getName() : "Unknown";
+                    String empId = (user != null) ? user.getId() : "Unknown";
+
+                    // FIX: Updated Constructor Call
+                    Sales s = new Sales(
+                        TimeUtils.getDate(), 
+                        TimeUtils.getTime(), 
+                        "Walk-in", 
+                        code, 
+                        qty, 
+                        price*qty, 
+                        "PENDING", 
+                        empName,
+                        currentOutlet, // <-- Added Outlet
+                        empId          // <-- Added ID
+                    );
                     currentCart.add(s);
                     refreshCart();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid Quantity or Insufficient Stock");
                 }
-            } catch(Exception e){}
+            } catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Invalid Number");
+            }
         }
 
         private void refreshCart() {
@@ -209,7 +229,7 @@ public class POSPanel extends BackgroundPanel {
         }
     }
 
-// =================================================================================
+    // =================================================================================
     //  STEP 2: PAYMENT DETAILS (Dynamic Form)
     // =================================================================================
     class PaymentStepPanel extends JPanel {
@@ -465,7 +485,14 @@ public class POSPanel extends BackgroundPanel {
             // --- FINAL TRANSACTION LOGIC ---
             for (Sales item : currentCart) {
                 item.setCustomerName(customerName);
-                item.setTransactionMethod(paymentMethod); // Now dynamic
+                item.setTransactionMethod(paymentMethod); 
+                
+                // Ensure Outlet and Employee are set (Inherit from session)
+                item.setOutletCode(currentOutlet);
+                if(AuthService.getCurrentUser() != null) {
+                    item.setEmployee(AuthService.getCurrentUser().getName());
+                    item.setEmployeeId(AuthService.getCurrentUser().getId());
+                }
 
                 // Update Stock
                 Model m = DataLoad.allModels.stream().filter(mod -> mod.getModelCode().equals(item.getModel())).findFirst().orElse(null);
@@ -477,7 +504,7 @@ public class POSPanel extends BackgroundPanel {
                 // Save Sale
                 DataLoad.allSales.add(item);
                 DatabaseHandler.saveSale(item);
-                CSVHandler.appendSale(item); // Remove if not needed
+                CSVHandler.appendSale(item); 
             }
             CSVHandler.writeStock(DataLoad.allModels);
             
@@ -525,8 +552,9 @@ public class POSPanel extends BackgroundPanel {
             return f;
         }
     }
-// =================================================================================
-    //  STEP 3: CONFIRMATION (Sneat Invoice Style) - FIXED
+
+    // =================================================================================
+    //  STEP 3: CONFIRMATION (Sneat Invoice Style)
     // =================================================================================
     class ConfirmationStepPanel extends JPanel {
         private JPanel invoiceContent; // The "Paper" part
@@ -590,7 +618,6 @@ public class POSPanel extends BackgroundPanel {
             header.setOpaque(false);
             
             // Left: Logo + Address
-            // FIXED: Removed 'new VerticalLayout(5)' and used standard BoxLayout
             JPanel leftHead = new JPanel(); 
             leftHead.setLayout(new BoxLayout(leftHead, BoxLayout.Y_AXIS));
             leftHead.setOpaque(false);
@@ -643,7 +670,6 @@ public class POSPanel extends BackgroundPanel {
             invoiceContent.add(Box.createVerticalStrut(40));
             
             // --- INVOICE TO & ISSUED BY ---
-            // FIXED: Removed 'new VerticalLayout(5)' here as well
             JPanel flowWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
             flowWrapper.setOpaque(false);
 
