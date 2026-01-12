@@ -1,0 +1,20 @@
+=== Stock In ===
+Date: 2026-01-12
+Time: 03:41 PM
+From: 7 ()
+To: 8 ()
+Models:
+
+Total Quantity: 0
+Employee in Charge: Tan Guan Han
+--------------------------------------------------
+=== Stock In ===
+Date: 2026-01-12
+Time: 04:45 PM
+From: 1 ()
+To: 2 ()
+Models:
+
+Total Quantity: 0
+Employee in Charge: Tan Guan Han
+--------------------------------------------------

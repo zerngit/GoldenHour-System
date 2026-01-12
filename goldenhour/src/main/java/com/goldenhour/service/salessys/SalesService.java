@@ -2,9 +2,11 @@ package com.goldenhour.service.salessys;
 
 import com.goldenhour.categories.*;
 import com.goldenhour.dataload.DataLoad;
+import com.goldenhour.service.loginregister.AuthService;
 import com.goldenhour.storage.CSVHandler;
 import com.goldenhour.storage.DatabaseHandler;
 import com.goldenhour.storage.ReceiptHandler;
+import com.goldenhour.utils.TimeUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +17,38 @@ public class SalesService {
     public void recordNewSale(Scanner sc, Employee employee) {
         if (employee == null) {
             System.out.println("Error: No employee logged in.");
+            return;
+        }
+
+        Employee currentUser = AuthService.getCurrentUser();
+        if (currentUser == null) {
+            System.out.println("\u001B[31mError: No user logged in.\u001B[0m");
+            return;
+        }
+        // Reload attendance from CSV to get the latest data
+        DataLoad.allAttendance = CSVHandler.readAttendance();
+        
+        // Check if user has clocked in today
+        String today = TimeUtils.getDate();
+        Attendance todayAttendance = null;
+        
+        for (Attendance a : DataLoad.allAttendance) {
+            if (a.getEmployeeId().equals(currentUser.getId()) && 
+                a.getDate().equals(today) && 
+                a.getClockInTime() != null) {
+                todayAttendance = a;
+                break;
+            }
+        }
+
+        if (todayAttendance == null){
+            System.out.println("\u001B[31mError: You must sign attendance first before performing stock count.\u001B[0m");
+        }
+        
+        // Check if user has already clocked out
+        if (todayAttendance.getClockOutTime() != null && !todayAttendance.getClockOutTime().isEmpty()) {
+            System.out.println("\u001B[31mError: You have already clocked out today.\u001B[0m");
+            System.out.println("Stock count can only be performed during your shift.");
             return;
         }
 

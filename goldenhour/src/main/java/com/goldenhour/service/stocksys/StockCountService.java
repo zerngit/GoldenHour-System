@@ -40,10 +40,8 @@ public class StockCountService {
             }
         }
         
-        if (todayAttendance == null || todayAttendance.getOutletCode() == null) {
+        if (todayAttendance == null){
             System.out.println("\u001B[31mError: You must sign attendance first before performing stock count.\u001B[0m");
-            System.out.println("Please clock in at your outlet to continue.");
-            return;
         }
         
         // Check if user has already clocked out
