@@ -66,9 +66,8 @@ public class AutoEmail {
      * SENDER_PASSWORD: Gmail APP PASSWORD (get from Gmail settings)
      * TARGET_HOUR/TARGET_MIN: Time to send email (22:15 = 10:15 PM)
      */
-    private static final String SENDER_EMAIL = "25006805@siswa.um.edu.my";
-    //private static final String SENDER_EMAIL = "25006805@siswa.um.edu.my";
-    private static final String SENDER_PASSWORD = "tuun okem pgdl rovr"; // Gmail app password (not login password)
+    private static final String SENDER_EMAIL = "XXXXXXXX@siswa.um.edu.my";
+    private static final String SENDER_PASSWORD = "****************"; // Gmail app password (not login password)
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
     private static final int TARGET_HOUR = 22;
@@ -92,7 +91,7 @@ public class AutoEmail {
         // Get today's sales data (null parameters = use current date and all outlets)
         DailySalesSummary todayStats = SalesCalculator.getSummary(null, null);
 
-        String recipient = "25006805@siswa.um.edu.my";
+        String recipient = "XXXXXXXX@siswa.um.edu.my";
         String date = TimeUtils.getDate();
         String filePath = "data/receipts/sales_" + date + ".txt";
         double totalSales = todayStats.getGrandTotal();
